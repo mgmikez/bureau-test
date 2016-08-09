@@ -65,7 +65,13 @@
     </script>
 	<div id="map" ></div>
     <script>
-      var map = new ol.Map({
+	
+	var getLocation = navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	
+	 function onSuccess(position) {
+      
+							
+		var map = new ol.Map({
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM()
@@ -73,10 +79,20 @@
         ],
         target: 'map',
         view: new ol.View({
-          center: [0, 0],
-          zoom: 2
+          center: ol.proj.transform([position.coords.longitude, position.coords.latitude],'EPSG:4326','EPSG:3857'),
+          zoom: 14
         })
       });
+    }
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+      
     </script>
 
 	
